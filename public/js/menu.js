@@ -68,11 +68,11 @@ export function renderProducts(products) {
           <div class="product-card-footer">
             <span class="product-card-price">S/ ${parseFloat(prod.price).toFixed(2)}</span>
             ${isSoldOut ? `
-              <button type="button" class="btn btn-secondary btn-sm" disabled style="opacity: 0.5; cursor: not-allowed; padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+              <button type="button" class="btn-sold-out-badge" disabled>
                 Agotado
               </button>
             ` : `
-              <button type="button" class="btn btn-primary btn-sm btn-select-product" data-id="${prod.id}" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+              <button type="button" class="btn-select-product" data-id="${prod.id}">
                 + Agregar
               </button>
             `}
