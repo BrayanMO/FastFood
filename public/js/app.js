@@ -66,6 +66,9 @@ function applyStoreSettings(settings) {
       if (settings.banner.bgColor) banner.style.backgroundColor = settings.banner.bgColor;
       if (settings.banner.textColor) banner.style.color = settings.banner.textColor;
       banner.style.display = 'flex';
+      banner.style.justifyContent = 'center';
+      banner.style.alignItems = 'center';
+      banner.style.textAlign = 'center';
     } else {
       banner.style.display = 'none';
     }

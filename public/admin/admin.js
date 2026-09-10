@@ -267,6 +267,14 @@ async function loadProducts() {
   }
 }
 
+function escapeHtml(t) {
+  return String(t || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 function renderProductsList() {
   const container = document.getElementById('admin-products-list');
   if (!container) return;
@@ -282,32 +290,61 @@ function renderProductsList() {
     list = list.filter(p => p.name.toLowerCase().includes(searchVal) || (p.description && p.description.toLowerCase().includes(searchVal)));
   }
 
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: #94a3b8;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🍽️</div>
+        <h4 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-bottom: 0.25rem;">No se encontraron platos</h4>
+        <p style="font-size: 0.85rem;">Prueba con otra búsqueda o añade un plato nuevo con el botón superior.</p>
+      </div>
+    `;
+    return;
+  }
+
   container.innerHTML = list.map(prod => {
     const isSoldOut = prod.available === false;
     const coverPhoto = (prod.images && prod.images[0]) || prod.imageUrl || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80';
+
     return `
-      <div class="admin-prod-card" data-id="${prod.id}">
+      <article class="admin-prod-card ${isSoldOut ? 'sold-out-card' : ''}" data-id="${prod.id}">
+        <!-- Foto y Badges Flotantes -->
         <div class="admin-prod-media">
-          <img src="${coverPhoto}" alt="${prod.name}" />
-          ${isSoldOut ? '<div style="position: absolute; inset: 0; background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center; color: #ef4444; font-weight: 800; font-size: 0.95rem; letter-spacing: 0.05em;">AGOTADO HOY</div>' : ''}
+          <img src="${coverPhoto}" alt="${escapeHtml(prod.name)}" loading="lazy" />
+          
+          <!-- Badge de Disponibilidad (Interactivo, elegante estilo Apple) -->
+          <button type="button" class="admin-avail-pill ${isSoldOut ? 'is-out' : 'is-ok'}" onclick="toggleSoldOut('${prod.id}')" title="Haz clic para alternar disponibilidad">
+            <span class="status-dot"></span>
+            <span>${isSoldOut ? 'Agotado' : 'Disponible'}</span>
+          </button>
+
+          <!-- Badge Destacado -->
+          ${prod.badge ? `<span class="admin-promo-badge">${escapeHtml(prod.badge)}</span>` : ''}
+
+          <!-- Overlay si está agotado -->
+          ${isSoldOut ? '<div class="admin-soldout-overlay"><span>AGOTADO HOY</span></div>' : ''}
         </div>
+
+        <!-- Contenido Minimalista -->
         <div class="admin-prod-content">
-          <span class="admin-prod-cat">${prod.category}</span>
-          <h4 class="admin-prod-title">${prod.name}</h4>
-          <div class="admin-prod-meta">
+          <div class="admin-card-header-row">
+            <span class="admin-prod-cat">${escapeHtml(prod.category)}</span>
             <span class="admin-prod-price">S/ ${parseFloat(prod.price).toFixed(2)}</span>
-            ${prod.badge ? `<span class="badge-role">${prod.badge}</span>` : '<span></span>'}
           </div>
 
+          <h4 class="admin-prod-title" title="${escapeHtml(prod.name)}">${escapeHtml(prod.name)}</h4>
+
+          <!-- Botonera Minimalista -->
           <div class="admin-prod-actions">
-            <button type="button" class="btn-toggle-sold ${isSoldOut ? 'is-sold-out' : ''}" onclick="toggleSoldOut('${prod.id}')">
-              ${isSoldOut ? '🔴 Agotado' : '🟢 Disponible'}
+            <button type="button" class="btn-action-edit" onclick="editProduct('${prod.id}')" title="Editar plato">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              <span>Editar</span>
             </button>
-            <button type="button" class="btn-edit-prod" onclick="editProduct('${prod.id}')">Editar</button>
-            <button type="button" class="btn-del-prod" onclick="deleteProduct('${prod.id}')">Eliminar</button>
+            <button type="button" class="btn-action-delete" onclick="deleteProduct('${prod.id}')" title="Eliminar plato">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
           </div>
         </div>
-      </div>
+      </article>
     `;
   }).join('');
 }
