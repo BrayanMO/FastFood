@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: rest-fastfood
+    env: node
+    region: ohio
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_PASSWORD
+        value: admin
+      - key: WHATSAPP_NUMBER
+        value: "988182681"
+      - key: STORE_NAME
+        value: "FUEGO & BRASA | Fast Food"
+      - key: CURRENCY_SYMBOL
+        value: "S/"
+      - key: CURRENCY_CODE
+        value: "SOL"
+      - key: CLOUDINARY_CLOUD_NAME
+        value: "mm8oatun"
+      - key: CLOUDINARY_API_KEY
+        value: "757224145112247"
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true

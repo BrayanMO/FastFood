@@ -1,6 +1,6 @@
 /**
  * Capa de Base de Datos para Rest FastFood
- * Con soporte para PostgreSQL Neon DB y persistencia local JSON
+ * Con soporte para PostgreSQL Neon DB y persistencia de respaldo local JSON
  */
 
 const fs = require('fs');
@@ -21,6 +21,7 @@ if (process.env.DATABASE_URL) {
       ssl: { rejectUnauthorized: false }
     });
     isDbConnected = true;
+    console.log('🔌 Conectando a PostgreSQL Neon DB...');
     initPgTables();
   } catch (err) {
     console.warn('⚠️ No se pudo conectar a PostgreSQL, usando archivos locales JSON:', err.message);
@@ -32,6 +33,13 @@ async function initPgTables() {
   if (!pool) return;
   try {
     await pool.query(`
+      CREATE TABLE IF NOT EXISTS food_categories (
+        id VARCHAR(50) PRIMARY KEY,
+        name VARCHAR(100) UNIQUE NOT NULL,
+        icon VARCHAR(50) DEFAULT '🍔',
+        "order" INT DEFAULT 0
+      );
+
       CREATE TABLE IF NOT EXISTS food_products (
         id VARCHAR(50) PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
@@ -39,19 +47,14 @@ async function initPgTables() {
         price NUMERIC(10, 2) NOT NULL,
         description TEXT,
         image_url TEXT,
+        images JSONB DEFAULT '[]'::jsonb,
         available BOOLEAN DEFAULT true,
         badge VARCHAR(100) DEFAULT '',
         allow_sides BOOLEAN DEFAULT false,
         allow_sauces BOOLEAN DEFAULT true,
+        allow_extras BOOLEAN DEFAULT true,
         extras JSONB DEFAULT '[]'::jsonb,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-
-      CREATE TABLE IF NOT EXISTS food_categories (
-        id VARCHAR(50) PRIMARY KEY,
-        name VARCHAR(100) UNIQUE NOT NULL,
-        icon VARCHAR(50) DEFAULT '🍔',
-        "order" INT DEFAULT 0
       );
 
       CREATE TABLE IF NOT EXISTS fastfood_settings (
@@ -60,22 +63,77 @@ async function initPgTables() {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('✅ Tablas PostgreSQL verificadas e inicializadas con éxito.');
+
+    // Columnas adicionales en caso de actualización
+    await pool.query(`
+      ALTER TABLE food_products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]'::jsonb;
+      ALTER TABLE food_products ADD COLUMN IF NOT EXISTS allow_extras BOOLEAN DEFAULT true;
+    `);
+
+    // Auto-sembrado si la base de datos está vacía
+    const catCheck = await pool.query('SELECT COUNT(*) FROM food_categories');
+    if (parseInt(catCheck.rows[0].count, 10) === 0) {
+      const localCats = readJson(CATEGORIES_FILE, []);
+      for (let i = 0; i < localCats.length; i++) {
+        const c = localCats[i];
+        await pool.query(
+          'INSERT INTO food_categories (id, name, icon, "order") VALUES ($1, $2, $3, $4) ON CONFLICT (name) DO NOTHING',
+          [c.id || ('cat-' + (i + 1)), c.name, c.icon || '🍔', c.order || (i + 1)]
+        );
+      }
+    }
+
+    const prodCheck = await pool.query('SELECT COUNT(*) FROM food_products');
+    if (parseInt(prodCheck.rows[0].count, 10) === 0) {
+      const localProds = readJson(PRODUCTS_FILE, []);
+      for (const p of localProds) {
+        await pool.query(`
+          INSERT INTO food_products (id, name, category, price, description, image_url, images, available, badge, allow_sides, allow_sauces, allow_extras, extras)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+          ON CONFLICT (id) DO NOTHING
+        `, [
+          p.id,
+          p.name,
+          p.category,
+          parseFloat(p.price) || 0,
+          p.description || '',
+          p.imageUrl || '',
+          JSON.stringify(p.images || [p.imageUrl].filter(Boolean)),
+          p.available !== undefined ? p.available : true,
+          p.badge || '',
+          Boolean(p.allowSides),
+          p.allowSauces !== false,
+          p.allowExtras !== false,
+          JSON.stringify(p.extras || [])
+        ]);
+      }
+    }
+
+    const setCheck = await pool.query("SELECT COUNT(*) FROM fastfood_settings WHERE id = 'main_config'");
+    if (parseInt(setCheck.rows[0].count, 10) === 0) {
+      const localSettings = readJson(SETTINGS_FILE, {});
+      await pool.query(
+        "INSERT INTO fastfood_settings (id, data, updated_at) VALUES ('main_config', $1, CURRENT_TIMESTAMP)",
+        [JSON.stringify(localSettings)]
+      );
+    }
+
+    console.log('✅ Tablas PostgreSQL Neon verificadas e inicializadas.');
   } catch (err) {
     console.error('Error al inicializar tablas PostgreSQL:', err.message);
   }
 }
 
-// Helpers JSON
-function readJson(file, fallback = []) {
+// ---------------- UTILIDADES LOCALES ----------------
+function readJson(file, defaultVal) {
   try {
-    if (fs.existsSync(file)) {
-      return JSON.parse(fs.readFileSync(file, 'utf8'));
-    }
+    if (!fs.existsSync(file)) return defaultVal;
+    const content = fs.readFileSync(file, 'utf8');
+    return JSON.parse(content);
   } catch (e) {
     console.error('Error al leer ' + file + ':', e.message);
+    return defaultVal;
   }
-  return fallback;
 }
 
 function writeJson(file, data) {
@@ -97,15 +155,20 @@ async function getProducts(filters = {}) {
         name: r.name,
         category: r.category,
         price: parseFloat(r.price),
-        description: r.description,
-        imageUrl: r.image_url,
+        description: r.description || '',
+        imageUrl: r.image_url || '',
+        images: Array.isArray(r.images) 
+          ? r.images 
+          : (typeof r.images === 'string' ? JSON.parse(r.images) : [r.image_url].filter(Boolean)),
         available: r.available,
-        badge: r.badge,
+        badge: r.badge || '',
         allowSides: r.allow_sides,
         allowSauces: r.allow_sauces,
+        allowExtras: r.allow_extras !== false,
         extras: typeof r.extras === 'string' ? JSON.parse(r.extras) : (r.extras || [])
       }));
     } catch (e) {
+      console.warn('Error leyendo productos de PG, usando fallback local:', e.message);
       list = readJson(PRODUCTS_FILE, []);
     }
   } else {
@@ -135,19 +198,35 @@ async function createProduct(prod) {
     price: parseFloat(prod.price) || 0,
     description: prod.description || '',
     imageUrl: prod.imageUrl || '',
+    images: Array.isArray(prod.images) ? prod.images : [prod.imageUrl].filter(Boolean),
     available: prod.available !== undefined ? prod.available : true,
     badge: prod.badge || '',
-    allowSides: !!prod.allowSides,
-    allowSauces: prod.allowSauces !== undefined ? !!prod.allowSauces : true,
+    allowSides: Boolean(prod.allowSides),
+    allowSauces: prod.allowSauces !== false,
+    allowExtras: prod.allowExtras !== false,
     extras: Array.isArray(prod.extras) ? prod.extras : []
   };
 
   if (isDbConnected && pool) {
     try {
       await pool.query(`
-        INSERT INTO food_products (id, name, category, price, description, image_url, available, badge, allow_sides, allow_sauces, extras)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-      `, [newProd.id, newProd.name, newProd.category, newProd.price, newProd.description, newProd.imageUrl, newProd.available, newProd.badge, newProd.allowSides, newProd.allowSauces, JSON.stringify(newProd.extras)]);
+        INSERT INTO food_products (id, name, category, price, description, image_url, images, available, badge, allow_sides, allow_sauces, allow_extras, extras)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      `, [
+        newProd.id,
+        newProd.name,
+        newProd.category,
+        newProd.price,
+        newProd.description,
+        newProd.imageUrl,
+        JSON.stringify(newProd.images),
+        newProd.available,
+        newProd.badge,
+        newProd.allowSides,
+        newProd.allowSauces,
+        newProd.allowExtras,
+        JSON.stringify(newProd.extras)
+      ]);
     } catch (e) {
       console.error('Error insert pg:', e.message);
     }
@@ -164,20 +243,39 @@ async function updateProduct(id, prod) {
   const index = list.findIndex(p => p.id === id);
   if (index === -1) return null;
 
+  const current = list[index];
   const updated = {
-    ...list[index],
+    ...current,
     ...prod,
-    price: prod.price !== undefined ? parseFloat(prod.price) : list[index].price,
-    extras: prod.extras !== undefined ? prod.extras : list[index].extras
+    price: prod.price !== undefined ? parseFloat(prod.price) : current.price,
+    images: prod.images !== undefined ? prod.images : current.images,
+    allowSides: prod.allowSides !== undefined ? Boolean(prod.allowSides) : current.allowSides,
+    allowSauces: prod.allowSauces !== undefined ? Boolean(prod.allowSauces) : current.allowSauces,
+    allowExtras: prod.allowExtras !== undefined ? Boolean(prod.allowExtras) : current.allowExtras,
+    extras: prod.extras !== undefined ? prod.extras : current.extras
   };
 
   if (isDbConnected && pool) {
     try {
       await pool.query(`
         UPDATE food_products
-        SET name = $1, category = $2, price = $3, description = $4, image_url = $5, available = $6, badge = $7, allow_sides = $8, allow_sauces = $9, extras = $10
-        WHERE id = $11
-      `, [updated.name, updated.category, updated.price, updated.description, updated.imageUrl, updated.available, updated.badge, updated.allowSides, updated.allowSauces, JSON.stringify(updated.extras), id]);
+        SET name = $1, category = $2, price = $3, description = $4, image_url = $5, images = $6, available = $7, badge = $8, allow_sides = $9, allow_sauces = $10, allow_extras = $11, extras = $12
+        WHERE id = $13
+      `, [
+        updated.name,
+        updated.category,
+        updated.price,
+        updated.description,
+        updated.imageUrl,
+        JSON.stringify(updated.images || []),
+        updated.available,
+        updated.badge,
+        updated.allowSides,
+        updated.allowSauces,
+        updated.allowExtras,
+        JSON.stringify(updated.extras),
+        id
+      ]);
     } catch (e) {
       console.error('Error update pg:', e.message);
     }
