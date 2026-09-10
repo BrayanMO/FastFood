@@ -10,10 +10,10 @@ export function initUI() {
   const backdropDrawer = document.getElementById('cart-drawer-backdrop');
   const mobileBar = document.getElementById('mobile-cart-bar');
 
-  if (btnOpenDesktop) btnOpenDesktop.addEventListener('click', openCartDrawer);
-  if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', closeCartDrawer);
-  if (backdropDrawer) backdropDrawer.addEventListener('click', closeCartDrawer);
-  if (mobileBar) mobileBar.addEventListener('click', openCartDrawer);
+  if (btnOpenDesktop) btnOpenDesktop.addEventListener('click', () => openCartDrawer(true));
+  if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', () => closeCartDrawer(true));
+  if (backdropDrawer) backdropDrawer.addEventListener('click', () => closeCartDrawer(true));
+  if (mobileBar) mobileBar.addEventListener('click', () => openCartDrawer(true));
 
   // Mobile Bottom Navigation Bar (Apple Liquid Glass)
   const navMenuBtn = document.getElementById('mobile-nav-menu-btn');
@@ -45,7 +45,7 @@ export function initUI() {
   if (navCartBtn) {
     navCartBtn.addEventListener('click', () => {
       setActiveMobileNav(navCartBtn);
-      openCartDrawer();
+      openCartDrawer(true);
     });
   }
 
@@ -61,21 +61,29 @@ function setActiveMobileNav(btn) {
   btn.classList.add('active');
 }
 
-export function openCartDrawer() {
+export function openCartDrawer(pushHistory = true) {
   const drawer = document.getElementById('cart-drawer');
   const backdrop = document.getElementById('cart-drawer-backdrop');
   if (drawer) drawer.classList.add('open');
   if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
   renderCartDrawerItems();
+
+  if (pushHistory && window.location.hash !== '#pedido' && window.location.hash !== '#carrito') {
+    history.pushState({ drawer: 'cart' }, '', '#pedido');
+  }
 }
 
-export function closeCartDrawer() {
+export function closeCartDrawer(syncHistory = false) {
   const drawer = document.getElementById('cart-drawer');
   const backdrop = document.getElementById('cart-drawer-backdrop');
   if (drawer) drawer.classList.remove('open');
   if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
+
+  if (syncHistory && (window.location.hash === '#pedido' || window.location.hash === '#carrito')) {
+    window.history.back();
+  }
 }
 
 export function updateCartUI() {

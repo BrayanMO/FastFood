@@ -18,25 +18,30 @@ export function initCheckout(settings) {
     btnGoToCheckout.addEventListener('click', () => {
       const cart = getCart();
       if (cart.length === 0) return;
-      closeCartDrawer();
-      openCheckoutModal();
+      closeCartDrawer(false);
+      if (window.location.hash === '#pedido' || window.location.hash === '#carrito') {
+        history.replaceState({ modal: 'checkout' }, '', '#checkout');
+        openCheckoutModal(false);
+      } else {
+        openCheckoutModal(true);
+      }
     });
   }
 
   // Cerrar checkout modal
   const closeBtn = document.getElementById('checkout-close-btn');
   const backdrop = document.getElementById('checkout-modal-backdrop');
-  if (closeBtn) closeBtn.addEventListener('click', closeCheckoutModal);
+  if (closeBtn) closeBtn.addEventListener('click', () => closeCheckoutModal(true));
   if (backdrop) {
     backdrop.addEventListener('click', (e) => {
-      if (e.target === backdrop) closeCheckoutModal();
+      if (e.target === backdrop) closeCheckoutModal(true);
     });
   }
 
   // Cerrar con Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && backdrop && backdrop.classList.contains('active')) {
-      closeCheckoutModal();
+      closeCheckoutModal(true);
     }
   });
 
@@ -67,7 +72,7 @@ export function initCheckout(settings) {
       isDragging = false;
       const deltaY = currentY - startY;
       if (deltaY > 100) {
-        closeCheckoutModal();
+        closeCheckoutModal(true);
       }
       dialog.style.transform = '';
     });
@@ -130,17 +135,25 @@ export function initCheckout(settings) {
   }
 }
 
-export function openCheckoutModal() {
+export function openCheckoutModal(pushHistory = true) {
   const backdrop = document.getElementById('checkout-modal-backdrop');
   if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
   updateCheckoutTotals();
+
+  if (pushHistory && window.location.hash !== '#checkout') {
+    history.pushState({ modal: 'checkout' }, '', '#checkout');
+  }
 }
 
-export function closeCheckoutModal() {
+export function closeCheckoutModal(syncHistory = false) {
   const backdrop = document.getElementById('checkout-modal-backdrop');
   if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
+
+  if (syncHistory && window.location.hash === '#checkout') {
+    window.history.back();
+  }
 }
 
 function getSelectedDeliveryFee() {

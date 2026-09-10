@@ -20,22 +20,26 @@ export function initProductModal(settings) {
 
   // Cerrar al hacer click fuera
   backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop) closeProductModal();
+    if (e.target === backdrop) closeProductModal(true);
   });
 
   // Cerrar con Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && backdrop.classList.contains('active')) {
-      closeProductModal();
+      closeProductModal(true);
     }
   });
 }
 
-export function openProductModal(product) {
+export function openProductModal(product, pushHistory = true) {
   if (!product || product.available === false) return;
   currentProduct = product;
   currentQuantity = 1;
   currentImgIndex = 0;
+
+  if (pushHistory && product.id) {
+    history.pushState({ modal: 'product', id: product.id }, '', `#plato-${product.id}`);
+  }
 
   // Determinar imágenes del producto
   if (product.images && Array.isArray(product.images) && product.images.length > 0) {
@@ -228,7 +232,7 @@ export function openProductModal(product) {
 
 function setupModalInteractions(backdrop) {
   const closeBtn = document.getElementById('modal-close-btn');
-  if (closeBtn) closeBtn.onclick = closeProductModal;
+  if (closeBtn) closeBtn.onclick = () => closeProductModal(true);
 
   const modalCard = backdrop.querySelector('.product-modal-card');
 
@@ -260,7 +264,7 @@ function setupModalInteractions(backdrop) {
       isDragging = false;
       const diffY = currentY - startY;
       if (diffY > 80 && modalCard.scrollTop <= 0) {
-        closeProductModal();
+        closeProductModal(true);
       } else {
         modalCard.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
         modalCard.style.transform = '';
@@ -367,7 +371,7 @@ function setupModalInteractions(backdrop) {
   }
 }
 
-export function closeProductModal() {
+export function closeProductModal(syncHistory = false) {
   const backdrop = document.getElementById('product-modal-backdrop');
   if (backdrop) {
     backdrop.classList.remove('active');
@@ -376,6 +380,10 @@ export function closeProductModal() {
   }
   document.body.style.overflow = '';
   currentProduct = null;
+
+  if (syncHistory && window.location.hash.startsWith('#plato-')) {
+    window.history.back();
+  }
 }
 
 function calculateUnitPrice() {
@@ -443,8 +451,13 @@ function handleConfirmAddToCart() {
   };
 
   addToCart(itemToAdd);
-  closeProductModal();
-  openCartDrawer();
+  closeProductModal(false);
+  if (window.location.hash.startsWith('#plato-')) {
+    history.replaceState({ drawer: 'cart' }, '', '#pedido');
+    openCartDrawer(false);
+  } else {
+    openCartDrawer(true);
+  }
 }
 
 function escapeHtml(text) {

@@ -5,8 +5,9 @@
 import { fetchSettings, fetchCategories, fetchProducts } from './api.js';
 import { initUI } from './ui.js';
 import { renderCategories, renderProducts } from './menu.js';
-import { initProductModal } from './product-modal.js';
-import { initCheckout } from './checkout.js';
+import { initProductModal, openProductModal, closeProductModal } from './product-modal.js';
+import { closeCartDrawer, openCartDrawer } from './ui.js';
+import { initCheckout, closeCheckoutModal } from './checkout.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Inicializar UI básica
@@ -30,6 +31,44 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 4. Cargar Platos Iniciales
   const products = await fetchProducts('Todos');
   renderProducts(products);
+
+  // 5. Manejo del botón Atrás del Navegador Móvil / Gestos de retroceso (PopState)
+  window.addEventListener('popstate', () => {
+    const checkoutBackdrop = document.getElementById('checkout-modal-backdrop');
+    const productBackdrop = document.getElementById('product-modal-backdrop');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartBackdrop = document.getElementById('cart-drawer-backdrop');
+
+    // Si el checkout modal estaba abierto, cerrarlo sin recargar ni salir
+    if (checkoutBackdrop && checkoutBackdrop.classList.contains('active')) {
+      closeCheckoutModal(false);
+      return;
+    }
+
+    // Si el modal de plato estaba abierto, cerrarlo
+    if (productBackdrop && productBackdrop.classList.contains('active')) {
+      closeProductModal(false);
+      return;
+    }
+
+    // Si el carrito drawer estaba abierto, cerrarlo
+    if ((cartDrawer && cartDrawer.classList.contains('open')) || (cartBackdrop && cartBackdrop.classList.contains('active'))) {
+      closeCartDrawer(false);
+      return;
+    }
+  });
+
+  // 6. Restaurar estado si la URL cargó con un hash inicial (#pedido o #plato-ID)
+  const initialHash = window.location.hash;
+  if (initialHash === '#pedido' || initialHash === '#carrito') {
+    openCartDrawer(false);
+  } else if (initialHash.startsWith('#plato-')) {
+    const prodId = initialHash.replace('#plato-', '');
+    const found = products.find(p => String(p.id) === String(prodId));
+    if (found) {
+      openProductModal(found, false);
+    }
+  }
 });
 
 function applyStoreSettings(settings) {
