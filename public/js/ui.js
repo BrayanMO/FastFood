@@ -155,7 +155,7 @@ function renderCartDrawerItems() {
       ` : ''}
 
       <div class="cart-item-actions">
-        <div class="qty-counter" style="padding: 0.15rem 0.35rem;">
+        <div class="qty-counter">
           <button type="button" class="qty-btn btn-cart-minus" data-index="${index}">-</button>
           <span class="qty-val">${item.quantity}</span>
           <button type="button" class="qty-btn btn-cart-plus" data-index="${index}">+</button>

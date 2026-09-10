@@ -261,102 +261,348 @@ body {
 }
 
 /* Product Cards in Admin */
+/* ==========================================================================
+   CARDS DE PLATOS EN EL PANEL ADMIN (DISEÑO MINIMALISTA Y REFINADO)
+   ========================================================================== */
 .admin-products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.25rem;
 }
 
 .admin-prod-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  position: relative;
 }
 
+.admin-prod-card:hover {
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.08);
+}
+
+.admin-prod-card.sold-out-card {
+  border-color: #fecaca;
+  background: #fffafa;
+}
+
+/* Media / Foto */
 .admin-prod-media {
   position: relative;
-  aspect-ratio: 16/9;
+  aspect-ratio: 4/3;
   background: #f1f5f9;
+  overflow: hidden;
 }
 
 .admin-prod-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
 }
 
+.admin-prod-card:hover .admin-prod-media img {
+  transform: scale(1.05);
+}
+
+/* Pill de Disponibilidad Flotante (Estilo Apple Minimalista) */
+.admin-avail-pill {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.admin-avail-pill.is-ok {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #15803d;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+.admin-avail-pill.is-ok:hover {
+  background: #ffffff;
+  transform: scale(1.04);
+}
+
+.admin-avail-pill.is-out {
+  background: rgba(254, 242, 242, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.admin-avail-pill .status-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.admin-avail-pill.is-ok .status-dot {
+  background: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+}
+
+.admin-avail-pill.is-out .status-dot {
+  background: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+}
+
+/* Badge Promo / Destacado */
+.admin-promo-badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  z-index: 5;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Overlay de Agotado */
+.admin-soldout-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.admin-soldout-overlay span {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+}
+
+/* Contenido de la Tarjeta */
 .admin-prod-content {
-  padding: 1rem;
-  flex: 1;
+  padding: 1rem 1.15rem 1.15rem;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-.admin-prod-title {
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin-bottom: 0.2rem;
-  color: var(--text-primary);
-}
-
-.admin-prod-meta {
+.admin-card-header-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.85rem;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.admin-prod-cat {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ea580c;
+  letter-spacing: 0.05em;
 }
 
 .admin-prod-price {
   font-family: var(--font-heading);
   font-size: 1.15rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #0f172a;
 }
 
+.admin-prod-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  margin: 0 0 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Barra de Acciones (Botonera) - Minimalista, estilizada y limpia */
 .admin-prod-actions {
   display: flex;
-  gap: 0.45rem;
+  align-items: center;
+  gap: 0.5rem;
   margin-top: auto;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border-light);
+  padding-top: 0.85rem;
+  border-top: 1px solid #f1f5f9;
 }
 
-.btn-toggle-sold {
+/* Botón Editar Minimalista (Estilo Tienda de Ropa) */
+.btn-action-edit {
   flex: 1;
-  background: var(--bg-muted);
-  border: 1px solid var(--border-light);
-  color: var(--text-primary);
-  padding: 0.45rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 9px;
+  font-size: 0.82rem;
   font-weight: 700;
+  font-family: var(--font-main);
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  line-height: 1;
 }
 
-.btn-toggle-sold.is-sold-out {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: #ef4444;
+.btn-action-edit svg {
+  color: #64748b;
+  transition: color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.btn-action-edit:hover {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #ea580c;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(234, 88, 12, 0.12);
+}
+
+.btn-action-edit:hover svg {
+  color: #ea580c;
+}
+
+.btn-action-edit:active {
+  transform: scale(0.98);
+}
+
+/* Botón Eliminar Minimalista (Estilo Tienda de Ropa) */
+.btn-action-delete {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-action-delete svg {
+  stroke-width: 2.2;
+  transition: transform 0.18s ease, color 0.18s ease;
+  flex-shrink: 0;
+}
+
+.btn-action-delete:hover {
+  background: #fef2f2;
   color: #ef4444;
+  border-color: #fecaca;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(239, 68, 68, 0.14);
 }
 
+.btn-action-delete:hover svg {
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.btn-action-delete:active {
+  transform: scale(0.95);
+}
+
+/* Fallbacks para tablas y elementos auxiliares */
 .btn-edit-prod, .btn-del-prod {
-  background: var(--bg-muted);
-  border: 1px solid var(--border-light);
-  color: var(--text-primary);
-  padding: 0.45rem 0.75rem;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.38rem 0.75rem;
   font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.18s ease;
+  line-height: 1;
+}
+
+.btn-edit-prod {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-edit-prod:hover {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #ea580c;
+}
+
+.btn-del-prod {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #94a3b8;
 }
 
 .btn-del-prod:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: var(--danger);
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #ef4444;
+}
+
+.chip-delete-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.15rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.chip-delete-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 /* Forms & UI */

@@ -189,7 +189,9 @@ function renderCategoriesTable() {
       <td style="font-size: 1.5rem;">${cat.icon || '🍔'}</td>
       <td><strong>${cat.name}</strong></td>
       <td>
-        <button type="button" class="btn-del-prod" onclick="deleteCategory('${cat.name}')">Eliminar</button>
+        <button type="button" class="btn-action-delete" onclick="deleteCategory('${cat.name}')" title="Eliminar categoría">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
       </td>
     </tr>
   `).join('');
@@ -868,7 +870,9 @@ function renderExtrasTable() {
         </button>
       </td>
       <td style="text-align: right;">
-        <button type="button" class="btn-del-prod" onclick="deleteExtra('${ext.id}')">Eliminar</button>
+        <button type="button" class="btn-action-delete" onclick="deleteExtra('${ext.id}')" title="Eliminar adicional">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
       </td>
     </tr>
   `).join('');

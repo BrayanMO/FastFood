@@ -208,7 +208,7 @@ export function openProductModal(product) {
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
               </span>
-              <span class="add-btn-text">Agregar al Pedido</span>
+              <span class="add-btn-text"><span class="text-long">Agregar al Pedido</span><span class="text-short">Agregar</span></span>
               <span class="add-btn-divider">•</span>
               <span class="add-btn-price" id="modal-calc-total">S/ ${parseFloat(product.price).toFixed(2)}</span>
             </button>

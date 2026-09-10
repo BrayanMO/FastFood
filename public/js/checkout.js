@@ -33,6 +33,46 @@ export function initCheckout(settings) {
     });
   }
 
+  // Cerrar con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop && backdrop.classList.contains('active')) {
+      closeCheckoutModal();
+    }
+  });
+
+  // Arrastrar hacia abajo para cerrar en móvil
+  const dragBar = document.getElementById('checkout-drag-bar');
+  const dialog = document.querySelector('.checkout-modal-dialog');
+  if (dragBar && dialog) {
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+
+    dragBar.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+      isDragging = true;
+    }, { passive: true });
+
+    dragBar.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentY = e.touches[0].clientY;
+      const deltaY = currentY - startY;
+      if (deltaY > 0) {
+        dialog.style.transform = `translateY(${deltaY}px)`;
+      }
+    }, { passive: true });
+
+    dragBar.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      const deltaY = currentY - startY;
+      if (deltaY > 100) {
+        closeCheckoutModal();
+      }
+      dialog.style.transform = '';
+    });
+  }
+
   // Tabs Delivery vs Retiro
   const tabDelivery = document.getElementById('tab-delivery');
   const tabPickup = document.getElementById('tab-pickup');
