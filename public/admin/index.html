@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - FUEGO & BRASA Fast Food</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🍳</text></svg>">
+</head>
+<body>
+
+  <!-- MODAL DE LOGIN -->
+  <div class="login-backdrop" id="login-overlay">
+    <div class="login-card">
+      <div class="login-header">
+        <span style="font-size: 2.5rem;">🔥</span>
+        <h2>Panel de Cocina & Gestión</h2>
+        <p>FUEGO & BRASA | Fast Food</p>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-password">Contraseña de Administrador</label>
+          <input type="password" class="form-input" id="login-password" placeholder="Ingresa tu contraseña" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+          Ingresar al Panel
+        </button>
+        <p class="login-hint">Contraseña por defecto: <code>admin</code></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PRINCIPAL -->
+  <div class="admin-layout" id="admin-layout" style="display: none;">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <span style="font-size: 1.5rem;">🔥</span>
+        <div>
+          <h3>Fuego & Brasa</h3>
+          <span class="badge-role">Cocina & Admin</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item active" data-tab="tab-products">
+          <span>🍔</span> Platos & Menú
+        </button>
+        <button type="button" class="nav-item" data-tab="tab-categories">
+          <span>🏷️</span> Categorías
+        </button>
+        <button type="button" class="nav-item" data-tab="tab-extras">
+          <span>🍟</span> Extras & Salsas
+        </button>
+        <button type="button" class="nav-item" data-tab="tab-settings">
+          <span>⚙️</span> Ajustes & Local
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/" target="_blank" class="btn-sidebar-link">
+          <span>👁️</span> Ver Tienda
+        </a>
+        <button type="button" class="btn-logout" id="btn-logout">
+          <span>🚪</span> Salir
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="admin-main">
+      <!-- TOPBAR -->
+      <header class="admin-topbar">
+        <div>
+          <h2 id="page-title">Gestión de Platos & Menú</h2>
+          <p class="topbar-subtitle">Control de disponibilidad diaria, precios y adicionales.</p>
+        </div>
+
+        <div class="topbar-actions">
+          <button type="button" class="status-quick-btn" id="btn-quick-toggle-store">
+            <span class="status-indicator-dot" id="quick-store-dot"></span>
+            <span id="quick-store-text">Local Abierto</span>
+          </button>
+          <button type="button" class="btn btn-primary" id="btn-add-product">
+            <span>+</span> Nuevo Plato
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB 1: PLATOS -->
+      <section class="admin-tab-content active" id="tab-products">
+        <div class="tab-filters">
+          <input type="text" class="form-input" id="search-product" placeholder="Buscar plato por nombre..." style="max-width: 320px;" />
+          <select class="form-select" id="filter-category" style="max-width: 200px;">
+            <option value="Todos">Todas las categorías</option>
+          </select>
+        </div>
+
+        <div class="admin-products-grid" id="admin-products-list">
+          <!-- Renderizado dinámico de productos -->
+        </div>
+      </section>
+
+      <!-- TAB 2: CATEGORÍAS -->
+      <section class="admin-tab-content" id="tab-categories">
+        <div class="card-box" style="max-width: 600px; margin-bottom: 2rem;">
+          <h3>Añadir Nueva Categoría</h3>
+          <form id="form-create-category" style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            <input type="text" class="form-input" id="new-cat-icon" placeholder="Icono (ej: 🌮)" style="width: 80px; text-align: center;" />
+            <input type="text" class="form-input" id="new-cat-name" placeholder="Nombre de categoría" required style="flex: 1;" />
+            <button type="submit" class="btn btn-primary">Crear</button>
+          </form>
+        </div>
+
+        <div class="categories-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Icono</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-categories-tbody">
+              <!-- Renderizado de categorías -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: AJUSTES -->
+      
+      <!-- TAB: EXTRAS Y SALSAS -->
+      <section class="admin-tab-content" id="tab-extras">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+          <!-- Adicionales de Pago -->
+          <div class="card-box" style="grid-column: 1 / -1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800;">🥓 Adicionales de Pago (Upselling)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Extras con costo que el cliente puede agregar a sus hamburguesas, alitas o platos.</p>
+              </div>
+            </div>
+
+            <!-- Formulario agregar extra -->
+            <form id="form-create-extra" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem; background: var(--bg-muted); padding: 1rem; border-radius: 10px;">
+              <input type="text" class="form-input" id="new-extra-name" placeholder="Nombre del adicional (Ej: Huevo Frito Montado)" required style="flex: 2; min-width: 240px;" />
+              <input type="number" step="0.50" class="form-input" id="new-extra-price" placeholder="Precio S/ (Ej: 2.50)" required style="flex: 1; min-width: 130px;" />
+              <button type="submit" class="btn btn-primary" style="white-space: nowrap;">+ Crear Adicional</button>
+            </form>
+
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre del Adicional</th>
+                  <th style="width: 140px;">Precio</th>
+                  <th style="width: 140px; text-align: center;">Disponibilidad</th>
+                  <th style="width: 120px; text-align: right;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="extras-table-body">
+                <!-- Renderizado dinámico -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Cremas & Salsas -->
+          <div class="card-box">
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem;">🥫 Cremas & Salsas de la Casa</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Salsas disponibles para que el cliente elija en el popup de su plato.</p>
+
+            <form id="form-create-sauce" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+              <input type="text" class="form-input" id="new-sauce-name" placeholder="Nueva salsa (Ej: Ají de la Casa)" required style="flex: 1;" />
+              <button type="submit" class="btn btn-primary" style="white-space: nowrap;">+ Agregar</button>
+            </form>
+
+            <div id="sauces-chips-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              <!-- Chips dinámicos -->
+            </div>
+          </div>
+
+          <!-- Guarniciones -->
+          <div class="card-box">
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem;">🍟 Opciones de Guarnición</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Guarniciones a elegir cuando el plato tiene activada la opción de guarnición.</p>
+
+            <form id="form-create-side" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+              <input type="text" class="form-input" id="new-side-name" placeholder="Nueva guarnición (Ej: Camote Frito)" required style="flex: 1;" />
+              <button type="submit" class="btn btn-primary" style="white-space: nowrap;">+ Agregar</button>
+            </form>
+
+            <div id="sides-chips-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              <!-- Chips dinámicos -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-tab-content" id="tab-settings">
+        <div class="settings-grid">
+          <!-- Datos de la Tienda -->
+          <div class="card-box">
+            <h3>🏪 Datos del Restaurante</h3>
+            <div class="form-group" style="margin-top: 1rem;">
+              <label class="form-label">Nombre del Negocio</label>
+              <input type="text" class="form-input" id="setting-store-name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">WhatsApp de Pedidos (Sin signos)</label>
+              <input type="text" class="form-input" id="setting-whatsapp" placeholder="988182681" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Horario de Atención</label>
+              <input type="text" class="form-input" id="setting-hours" placeholder="Mar - Dom: 6:00 PM - 11:30 PM" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tiempo Estimado de Espera</label>
+              <input type="text" class="form-input" id="setting-estimated-time" placeholder="25 - 40 min" />
+            </div>
+          </div>
+
+          <!-- Portada y Banner -->
+          <div class="card-box">
+            <h3>🖼️ Portada y Promoción</h3>
+            <div class="form-group" style="margin-top: 1rem;">
+              <label class="form-label">Texto del Banner Superior</label>
+              <input type="text" class="form-input" id="setting-banner-text" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">URL Foto de Portada (Hero)</label>
+              <input type="text" class="form-input" id="setting-hero-image" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Título de Portada</label>
+              <input type="text" class="form-input" id="setting-hero-title" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Descripción de Portada</label>
+              <textarea class="form-input" id="setting-hero-desc" style="height: 70px;"></textarea>
+            </div>
+          </div>
+
+          <!-- Métodos de Pago -->
+          <div class="card-box" style="grid-column: 1 / -1;">
+            <h3>💳 Métodos de Pago</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+              <div class="form-group">
+                <label class="form-label">Número de Yape</label>
+                <input type="text" class="form-input" id="setting-yape-number" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Titular de Yape</label>
+                <input type="text" class="form-input" id="setting-yape-holder" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Número de Plin</label>
+                <input type="text" class="form-input" id="setting-plin-number" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Titular de Plin</label>
+                <input type="text" class="form-input" id="setting-plin-holder" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: right;">
+          <button type="button" class="btn btn-primary" id="btn-save-settings" style="padding: 0.85rem 2rem;">
+            💾 Guardar Todos los Ajustes
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL CREAR / EDITAR PLATO -->
+  <div class="modal-backdrop" id="product-crud-backdrop">
+    <div class="crud-modal-dialog">
+      <div class="crud-modal-header">
+        <h3 id="crud-modal-title">Nuevo Plato de Comida</h3>
+        <button type="button" class="btn-close-modal" id="btn-close-crud">&times;</button>
+      </div>
+
+      <form id="form-product-crud" class="crud-modal-body">
+        <input type="hidden" id="crud-prod-id" />
+
+        <div class="form-group">
+          <label class="form-label">Nombre del Plato *</label>
+          <input type="text" class="form-input" id="crud-name" placeholder="Ej: Hamburguesa Monster Doble" required />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Categoría *</label>
+            <select class="form-select" id="crud-category" required>
+              <!-- Categorías dinámicas -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Precio Base (S/) *</label>
+            <input type="number" step="0.50" class="form-input" id="crud-price" placeholder="24.50" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Descripción Apetitosa</label>
+          <textarea class="form-input" id="crud-desc" placeholder="Detalla los ingredientes principales..." style="height: 70px;"></textarea>
+        </div>
+
+        <!-- Fotos del Plato (Galería con Multiselección y Reordenamiento) -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <label class="form-label" style="margin-bottom: 0;">Fotos del Plato (Galería)</label>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Arrastra para ordenar • #1 será la portada</span>
+          </div>
+
+          <input type="file" id="file-upload-input" accept="image/*" multiple style="display: none;" />
+
+          <div class="upload-zone" id="upload-dropzone">
+            <svg style="margin: 0 auto 0.4rem; color: var(--text-muted);" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p style="font-size: 0.875rem; font-weight: 600; color: var(--text-primary);">Selecciona una o varias fotos a la vez</p>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Se estandarizan automáticamente al tamaño uniforme del menú</span>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-top: 0.6rem;">
+            <input type="url" id="input-image-url" class="form-input" style="font-size: 0.85rem;" placeholder="O pega un enlace de imagen (https://...)" />
+            <button type="button" id="btn-add-image-url" class="btn btn-secondary btn-sm" style="white-space: nowrap;">+ Agregar Enlace</button>
+          </div>
+
+          <div class="images-preview-grid" id="images-preview-list"></div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Etiqueta Destacada (Badge)</label>
+            <input type="text" class="form-input" id="crud-badge" placeholder="Ej: 🔥 Más Pedido, ⭐ Especial" />
+          </div>
+          <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; gap: 0.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="crud-allow-sides" checked />
+              <span>Permitir Guarnición (Papas/Ensalada)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="crud-allow-sauces" checked />
+              <span>Permitir Selección de Cremas</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="crud-allow-extras" checked />
+              <span>Permitir Adicionales de Pago (Extras)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="crud-modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-crud">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-crud">Guardar Plato</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+<div id="toast-container" class="toast-container"></div>
+</body>
+</html>

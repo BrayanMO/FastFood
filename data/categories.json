@@ -1,0 +1,32 @@
+[
+  {
+    "id": "cat-hamburguesas",
+    "name": "Hamburguesas",
+    "icon": "🍔",
+    "order": 1
+  },
+  {
+    "id": "cat-alitas",
+    "name": "Alitas & Broaster",
+    "icon": "🍗",
+    "order": 2
+  },
+  {
+    "id": "cat-salchipapas",
+    "name": "Salchipapas",
+    "icon": "🍟",
+    "order": 3
+  },
+  {
+    "id": "cat-chaufas",
+    "name": "Chaufas & Combos",
+    "icon": "🥡",
+    "order": 4
+  },
+  {
+    "id": "cat-bebidas",
+    "name": "Bebidas & Postres",
+    "icon": "🥤",
+    "order": 5
+  }
+]

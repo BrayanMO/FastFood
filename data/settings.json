@@ -1,0 +1,135 @@
+{
+  "storeName": "FUEGO & BRASA | Fast Food",
+  "tagline": "Hamburguesas smash al carbón, alitas crujientes y salchipapas salvajes",
+  "whatsappNumber": "988182681",
+  "currencySymbol": "S/",
+  "currencyCode": "SOL",
+  "isOpen": true,
+  "openingHours": "Mar - Dom: 6:00 PM - 11:30 PM",
+  "estimatedTime": "25 - 40 min",
+  "banner": {
+    "enabled": true,
+    "text": "🔥 ¡HOY! Delivery gratis por pedidos mayores a S/ 45 en Surco y Miraflores",
+    "bgColor": "#ea580c",
+    "textColor": "#ffffff"
+  },
+  "hero": {
+    "tag": "Sabor al Carbón 2026",
+    "title": "Hamburguesas Smash y Alitas Brutales.",
+    "description": "Carnes 100% Angus molidas a diario, papas nativas doradas al punto y salsas secretas de la casa.",
+    "ctaText": "Ver Menú Completo",
+    "imageUrl": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=80",
+    "badgeTitle": "Parrilla al Carbón",
+    "badgeText": "100% Carne Angus Artesanal"
+  },
+  "paymentMethods": {
+    "yape": {
+      "enabled": true,
+      "number": "988182681",
+      "holder": "Fuego & Brasa Fast Food"
+    },
+    "plin": {
+      "enabled": true,
+      "number": "988182681",
+      "holder": "Fuego & Brasa Fast Food"
+    },
+    "transferencia": {
+      "enabled": true,
+      "bank": "BCP",
+      "account": "194-988182681-0-22",
+      "cci": "002-194-00988182681022-91",
+      "holder": "Fuego & Brasa SAC"
+    },
+    "contraEntrega": {
+      "enabled": true,
+      "allowCash": true,
+      "allowPos": true
+    }
+  },
+  "deliveryZones": [
+    {
+      "name": "Surco (Zona Centro / Chacarilla)",
+      "cost": 5
+    },
+    {
+      "name": "Miraflores / Barranco",
+      "cost": 7
+    },
+    {
+      "name": "San Borja / Surquillo",
+      "cost": 6
+    },
+    {
+      "name": "San Isidro / Magdalena",
+      "cost": 8
+    },
+    {
+      "name": "Retiro en Local (Calle Los Sauces 450, Surco)",
+      "cost": 0
+    }
+  ],
+  "globalSauces": [
+    "Mayonesa Artesanal de la Casa",
+    "Tártara Especial con Finas Hierbas",
+    "Ají Pollero Parrillero (Pica sabroso)",
+    "Salsa Golf Tradicional",
+    "Mostaza Americana Suave",
+    "Kétchup Heinz",
+    "Salsa BBQ Rústica Ahumada"
+  ],
+  "globalExtras": [
+    {
+      "id": "ext-1",
+      "name": "Huevo Frito Montado",
+      "price": 2.5,
+      "active": true
+    },
+    {
+      "id": "ext-2",
+      "name": "Queso Cheddar Fundido",
+      "price": 3,
+      "active": true
+    },
+    {
+      "id": "ext-3",
+      "name": "Tocino Ahumado Crispy",
+      "price": 3.5,
+      "active": true
+    },
+    {
+      "id": "ext-4",
+      "name": "Porción Extra de Papas Nativas",
+      "price": 5,
+      "active": true
+    },
+    {
+      "id": "ext-5",
+      "name": "Aros de Cebolla Crocantes",
+      "price": 4,
+      "active": true
+    },
+    {
+      "id": "ext-6",
+      "name": "Gaseosa Inka Kola / Coca 500ml",
+      "price": 4.5,
+      "active": true
+    },
+    {
+      "id": "ext-1789071282986",
+      "name": "Huevo Montado Especial",
+      "price": 3,
+      "active": true
+    },
+    {
+      "id": "ext-1789072037575",
+      "name": "Aros de Cebolla Crispy",
+      "price": 4.5,
+      "active": true
+    }
+  ],
+  "globalSides": [
+    "Papas Nativas Crujientes",
+    "Papas Clásicas Fritas",
+    "Ensalada Fresca de la Casa"
+  ]
+}

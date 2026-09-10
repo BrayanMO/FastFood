@@ -1,0 +1,210 @@
+[
+  {
+    "id": "prod-1",
+    "name": "Hamburguesa Monster Doble",
+    "category": "Hamburguesas",
+    "price": 24.5,
+    "description": "Doble carne angus smash de 150g, doble queso cheddar fundido, tocino ahumado ultra crispy, lechuga y tomate.",
+    "imageUrl": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "🔥 Más Pedido",
+    "allowSides": true,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "Huevo Frito Montado",
+        "price": 2.5
+      },
+      {
+        "name": "Queso Cheddar Extra",
+        "price": 3
+      },
+      {
+        "name": "Tocino Ahumado Extra",
+        "price": 3.5
+      },
+      {
+        "name": "Porción Extra de Papas",
+        "price": 5
+      }
+    ]
+  },
+  {
+    "id": "prod-2",
+    "name": "Hamburguesa Royal Clásica",
+    "category": "Hamburguesas",
+    "price": 19,
+    "description": "Carne artesanal al carbón 160g, huevo frito montado, queso cheddar fundido, papas al hilo y ensalada fresca.",
+    "imageUrl": "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "⭐ Favorito",
+    "allowSides": true,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "Queso Cheddar Extra",
+        "price": 3
+      },
+      {
+        "name": "Tocino Ahumado",
+        "price": 3.5
+      },
+      {
+        "name": "Doble Carne (+160g)",
+        "price": 7
+      }
+    ]
+  },
+  {
+    "id": "prod-3",
+    "name": "Hamburguesa BBQ Bacon Smash",
+    "category": "Hamburguesas",
+    "price": 21.5,
+    "description": "Carne smash con costra caramelizada, aros de cebolla crocantes, salsa BBQ ahumada de la casa y doble queso.",
+    "imageUrl": "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "",
+    "allowSides": true,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "Aros de Cebolla Extra",
+        "price": 4
+      },
+      {
+        "name": "Tocino Ahumado",
+        "price": 3.5
+      },
+      {
+        "name": "Queso Cheddar",
+        "price": 3
+      }
+    ]
+  },
+  {
+    "id": "prod-4",
+    "name": "Alitas Acevichadas x8",
+    "category": "Alitas & Broaster",
+    "price": 25,
+    "description": "Alitas rebozadas en tempura crujiente, bañadas en nuestra cremosa salsa acevichada nikkei y cebollita china.",
+    "imageUrl": "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "🔥 Top Ventas",
+    "allowSides": true,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "Salsa Acevichada Extra",
+        "price": 3
+      },
+      {
+        "name": "Papas Nativas Grandes",
+        "price": 5
+      },
+      {
+        "name": "Gaseosa 500ml",
+        "price": 4.5
+      }
+    ]
+  },
+  {
+    "id": "prod-5",
+    "name": "Alitas BBQ Ahumadas x8",
+    "category": "Alitas & Broaster",
+    "price": 24,
+    "description": "Alitas jugosas caramelizadas a fuego lento con salsa BBQ rústica, toques de panela y semillas de ajonjolí.",
+    "imageUrl": "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "",
+    "allowSides": true,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "Salsa BBQ Extra",
+        "price": 2.5
+      },
+      {
+        "name": "Porción de Papas",
+        "price": 5
+      }
+    ]
+  },
+  {
+    "id": "prod-6",
+    "name": "Salchipapa Salvaje Parrillera",
+    "category": "Salchipapas",
+    "price": 22,
+    "description": "Base abundante de papas nativas crocantes, salchicha Frankfurt, chorizo parrillero ahumado, huevo frito y queso cheddar.",
+    "imageUrl": "https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "⭐ Para Compartir",
+    "allowSides": false,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "Huevo Frito Extra",
+        "price": 2.5
+      },
+      {
+        "name": "Chorizo Parrillero Adicional",
+        "price": 4.5
+      },
+      {
+        "name": "Queso Fundido Extra",
+        "price": 3
+      }
+    ]
+  },
+  {
+    "id": "prod-7",
+    "name": "Aeropuerto Chaufa con Alitas Crispy",
+    "category": "Chaufas & Combos",
+    "price": 26.5,
+    "description": "Contundente arroz chaufa al wok bien ahumado con frejol chino, fideos saltados crocantes y 4 alitas crispy doradas.",
+    "imageUrl": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "🔥 Brutal",
+    "allowSides": false,
+    "allowSauces": true,
+    "extras": [
+      {
+        "name": "+2 Alitas Crispy",
+        "price": 6
+      },
+      {
+        "name": "Huevo Montado",
+        "price": 2.5
+      },
+      {
+        "name": "Inka Kola 500ml",
+        "price": 4.5
+      }
+    ]
+  },
+  {
+    "id": "prod-8",
+    "name": "Chicha Morada Casera 1 Litro",
+    "category": "Bebidas & Postres",
+    "price": 9,
+    "description": "Hervida con maíz morado selecto, piña Golden, membrillo, clavo y canela aromática. Bien helada.",
+    "imageUrl": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "100% Natural",
+    "allowSides": false,
+    "allowSauces": false,
+    "extras": []
+  },
+  {
+    "id": "prod-9",
+    "name": "Inka Kola / Coca Cola 500ml",
+    "category": "Bebidas & Postres",
+    "price": 4.5,
+    "description": "Botella personal bien helada a elección (Inka Kola o Coca Cola normal / zero).",
+    "imageUrl": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=80",
+    "available": true,
+    "badge": "",
+    "allowSides": false,
+    "allowSauces": false,
+    "extras": []
+  }
+]

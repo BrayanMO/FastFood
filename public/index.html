@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FUEGO & BRASA | Fast Food - Pedidos por WhatsApp</title>
+  <meta name="description" content="Hamburguesas smash artesanales al carbón, alitas crujientes y salchipapas salvajes. Pide en segundos directo a nuestro WhatsApp.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>">
+</head>
+<body>
+
+  <!-- BANNER SUPERIOR PROMO -->
+  <div class="announcement-banner" id="announcement-banner">
+    <span id="announcement-text">🔥 ¡HOY! Delivery gratis por pedidos mayores a S/ 45 en Surco y Miraflores</span>
+  </div>
+
+  <!-- HEADER DE LA TIENDA -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand-logo">
+        <span class="brand-icon">🔥</span>
+        <span class="brand-text" id="store-brand-name">FUEGO & BRASA</span>
+      </a>
+
+      <div class="header-status-pill" id="store-status-pill">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">Abierto ahora</span>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="cart-btn-desktop" id="btn-open-cart-desktop">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Mi Pedido</span>
+          <span class="cart-badge" id="cart-badge-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-tag" id="hero-tag-badge">
+            <span>&#9733;</span> <span id="hero-tag-text">SABOR AL CARBÓN 2026</span>
+          </div>
+          <h1 class="hero-title" id="hero-title-text">Hamburguesas Smash y Alitas Brutales.</h1>
+          <p class="hero-description" id="hero-desc-text">
+            Carnes 100% Angus molidas a diario, papas nativas doradas al punto y salsas secretas de la casa.
+          </p>
+
+          <div class="hero-meta-badges">
+            <div class="meta-chip">
+              <span>⏱️</span> Tiempo estimado: <strong id="hero-estimated-time">25 - 40 min</strong>
+            </div>
+            <div class="meta-chip">
+              <span>🛵</span> Modalidad: <strong>Delivery & Retiro</strong>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#menu-catalog" class="btn btn-primary" id="hero-cta-btn">
+              <span id="hero-cta-label">Ver Menú Completo</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <polyline points="19 12 12 19 5 12"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-media">
+          <div class="hero-image-wrapper">
+            <img id="hero-image-img" src="" data-fallback="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=80" alt="Hamburguesas Fuego y Brasa" loading="eager" style="opacity: 0;" />
+            <script>
+              (function() {
+                try {
+                  var cached = localStorage.getItem('fastfood_cached_hero');
+                  var img = document.getElementById('hero-image-img');
+                  if (img && cached) {
+                    img.src = cached;
+                    img.style.opacity = '1';
+                  }
+                } catch(e) {}
+              })();
+            </script>
+            <div class="hero-badge-overlay">
+              <div class="hero-badge-title" id="hero-badge-title-text">Parrilla al Carbón</div>
+              <div class="hero-badge-desc" id="hero-badge-desc-text">100% Carne Angus Artesanal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORÍAS (BARRA FLOTANTE / STICKY) -->
+  <nav class="categories-nav-wrapper" id="menu-catalog">
+    <div class="container">
+      <div class="categories-pills-list" id="categories-pills-container">
+        <button type="button" class="category-pill active" data-category="Todos">
+          <span>🔥</span> Todos
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CATÁLOGO DE PLATOS -->
+  <main class="menu-section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="current-category-title">Nuestras Especialidades</h2>
+          <p class="section-subtitle">Preparados al momento con ingredientes frescos y salsas de la casa.</p>
+        </div>
+      </div>
+
+      <div class="products-grid" id="products-container">
+        <!-- Renderizado dinámico de platos -->
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL DE PERSONALIZACIÓN DE PLATO (ESTILO MINIMALISTA TIENDA DE ROPA) -->
+  <div class="modal-backdrop" id="product-modal-backdrop" role="dialog" aria-modal="true">
+    <!-- Renderizado dinámicamente con alta estética desde product-modal.js -->
+  </div>
+
+  <!-- BARRA FLOTANTE DE CARRITO EN MOBILE -->
+  <div class="mobile-cart-bar hidden" id="mobile-cart-bar">
+    <div class="cart-bar-left">
+      <div class="cart-icon-bubble">🍔</div>
+      <div class="cart-bar-info">
+        <span class="cart-bar-items-count" id="cart-bar-count">0 platos</span>
+        <span class="cart-bar-total" id="cart-bar-total">S/ 0.00</span>
+      </div>
+    </div>
+    <div class="cart-bar-btn">
+      <span>Ver Pedido</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CART DRAWER (RESUMEN DEL PEDIDO) -->
+  <div class="drawer-backdrop" id="cart-drawer-backdrop"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3>
+        <span>🛒</span> Mi Pedido
+      </h3>
+      <button type="button" class="drawer-close-btn" id="drawer-close-btn">&times;</button>
+    </div>
+
+    <div class="drawer-body" id="cart-items-list">
+      <!-- Renderizado dinámico de items -->
+    </div>
+
+    <div class="drawer-footer" id="cart-drawer-footer">
+      <div class="subtotal-row">
+        <span>Subtotal</span>
+        <span id="cart-drawer-subtotal">S/ 0.00</span>
+      </div>
+      <div class="total-row">
+        <span>Total a Pagar</span>
+        <span id="cart-drawer-total">S/ 0.00</span>
+      </div>
+      <button type="button" class="btn-checkout-now" id="btn-go-to-checkout">
+        <span>Continuar con el Pedido</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-backdrop" id="checkout-modal-backdrop">
+    <div class="product-modal-dialog checkout-modal-dialog">
+      <div class="drawer-header">
+        <h3>
+          <span>🛵</span> Finalizar y Enviar Pedido
+        </h3>
+        <button type="button" class="drawer-close-btn" id="checkout-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body-scroll">
+        <!-- Tabs Delivery vs Retiro -->
+        <div class="order-type-tabs">
+          <button type="button" class="order-type-tab active" data-type="delivery" id="tab-delivery">
+            🛵 Delivery a Domicilio
+          </button>
+          <button type="button" class="order-type-tab" data-type="pickup" id="tab-pickup">
+            🛍️ Retiro en Local
+          </button>
+        </div>
+
+        <!-- Campos de Datos Personales -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="client-name">Nombre y Apellido *</label>
+            <input type="text" class="form-input" id="client-name" placeholder="Ej: Carlos Mendoza" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="client-phone">Teléfono / WhatsApp *</label>
+            <input type="tel" class="form-input" id="client-phone" placeholder="Ej: 988 182 681" required />
+          </div>
+        </div>
+
+        <!-- Campos de Delivery -->
+        <div id="delivery-fields-box">
+          <div class="form-group">
+            <label class="form-label" for="delivery-zone">Zona / Distrito de Reparto *</label>
+            <select class="form-select" id="delivery-zone">
+              <!-- Renderizado dinámico desde settings.deliveryZones -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="delivery-address">Dirección de Entrega Exacta *</label>
+            <input type="text" class="form-input" id="delivery-address" placeholder="Av. Los Sauces 450, Dpto 302" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="delivery-reference">Referencia de Entrega</label>
+            <input type="text" class="form-input" id="delivery-reference" placeholder="Frente al parque, portón blanco..." />
+          </div>
+        </div>
+
+        <!-- Campos de Retiro en Tienda -->
+        <div id="pickup-fields-box" style="display: none;">
+          <div class="payment-details-box">
+            <strong>📍 Dirección del Local:</strong> Calle Los Sauces 450, Santiago de Surco.<br>
+            <strong>⏰ Horario:</strong> Listo para retirar en aprox. 20 - 30 minutos tras confirmar.
+          </div>
+        </div>
+
+        <!-- Métodos de Pago -->
+        <div class="form-group">
+          <label class="form-label">Método de Pago *</label>
+          <div class="payment-methods-grid" id="payment-methods-container">
+            <div class="payment-card-option active" data-method="yape">
+              <span>🟣</span> <strong>Yape</strong>
+            </div>
+            <div class="payment-card-option" data-method="plin">
+              <span>🔵</span> <strong>Plin</strong>
+            </div>
+            <div class="payment-card-option" data-method="transferencia">
+              <span>🏦</span> <strong>Transferencia</strong>
+            </div>
+            <div class="payment-card-option" data-method="contraEntrega">
+              <span>💵</span> <strong>Contra Entrega</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detalle del Pago Seleccionado -->
+        <div class="payment-details-box" id="payment-info-box">
+          <!-- Renderizado dinámico según el método -->
+        </div>
+
+        <!-- Resumen de Costos -->
+        <div style="background: var(--bg-card); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div class="subtotal-row" style="margin-bottom: 0.4rem;">
+            <span>Subtotal Platos:</span>
+            <span id="checkout-subtotal">S/ 0.00</span>
+          </div>
+          <div class="subtotal-row" style="margin-bottom: 0.4rem;" id="checkout-delivery-row">
+            <span>Costo de Envío:</span>
+            <span id="checkout-delivery-fee">S/ 5.00</span>
+          </div>
+          <div class="total-row" style="padding-top: 0.5rem; border-top: 1px solid var(--border);">
+            <span>TOTAL FINAL:</span>
+            <span id="checkout-total-final" style="color: var(--primary);">S/ 0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="padding: 1.25rem 1.5rem;">
+        <button type="button" class="btn-send-whatsapp" id="btn-send-order-whatsapp">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.275.072.376-.044c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.203c.043.072.043.419-.101.824z"/>
+          </svg>
+          <span>Confirmar y Enviar Pedido</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="/js/app.js"></script>
+
+  <!-- BARRA DE NAVEGACIÓN INFERIOR PARA MÓVIL (APPLE LIQUID GLASS WHITE) -->
+  <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Navegación móvil">
+    <button type="button" class="mobile-nav-item active" id="mobile-nav-menu-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span>Menú</span>
+    </button>
+    <button type="button" class="mobile-nav-item" id="mobile-nav-cat-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Categorías</span>
+    </button>
+    <button type="button" class="mobile-nav-item" id="mobile-nav-cart-btn" aria-label="Abrir pedido">
+      <div style="position: relative; display: inline-flex;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span class="mobile-nav-badge" id="mobile-cart-badge" style="display: none;">0</span>
+      </div>
+      <span>Mi Pedido</span>
+    </button>
+    <a href="https://wa.me/51988182681" target="_blank" class="mobile-nav-item" id="mobile-nav-whatsapp-btn" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+      </svg>
+      <span>WhatsApp</span>
+    </a>
+  </nav>
+
+</body>
+</html>
